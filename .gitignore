@@ -351,3 +351,5 @@ MigrationBackup/
 /OPC Foundation/CertificateStores/UA Applications/certs
 /JSON
 /NodeSets
+/UANodeSet.aasx
+/DTDL.aasx

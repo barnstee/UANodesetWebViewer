@@ -1,5 +1,7 @@
 ﻿
 using System;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace UACloudLibrary
 {
@@ -10,20 +12,21 @@ namespace UACloudLibrary
         Custom
     }
 
+    [Table("AddressSpaces")]
     public class AddressSpace
     {
         public AddressSpace()
         {
-            ID = string.Empty;
+            ID = Guid.NewGuid().ToString();
             Title = string.Empty;
             Version = "1.0.0";
             License = AddressSpaceLicense.Custom;
             CopyrightText = string.Empty;
-            CreationTimeStamp = DateTime.UtcNow;
-            LastModification = DateTime.UtcNow;
+            CreationTime = DateTime.UtcNow;
+            LastModificationTime = DateTime.UtcNow;
             Contributor = new Organisation();
             Description = string.Empty;
-            Category = new AddresSpaceCategory();
+            Category = new AddressSpaceCategory();
             Nodeset = new AddressSpaceNodeset2();
             DocumentationUrl = null;
             IconUrl = null;
@@ -34,29 +37,45 @@ namespace UACloudLibrary
             TestSpecificationUrl = null;
             SupportedLocales = null;
             NumberOfDownloads = 0;
-            AdditionalProperties = null;
+            AdditionalProperties = new Tuple<string, string>[0];
         }
 
+        [Key]
+        [Required]
         public string ID { get; set; }
 
+        [Required]
         public string Title { get; set; }
+
 
         public string Version { get; set; }
 
+        [Required]
         public AddressSpaceLicense License { get; set; }
 
         public string CopyrightText { get; set; }
 
-        public DateTime CreationTimeStamp { get; set; }
+        public DateTime CreationTime { get; set; }
 
-        public DateTime LastModification { get; set; }
+        public DateTime LastModificationTime { get; set; }
 
+        // Specifically used for efcore related data loading
+        [ForeignKey("Contributor")]
+        public string ContributorID { get; set; }
+
+        [Required]
         public Organisation Contributor { get; set; }
 
         public string Description { get; set; }
 
-        public AddresSpaceCategory Category { get; set; }
+        // Specifically used for efcore related data loading
+        [ForeignKey("Category")]
+        public string CategoryID { get; set; }
 
+        [Required]
+        public AddressSpaceCategory Category { get; set; }
+
+        [Required]
         public AddressSpaceNodeset2 Nodeset { get; set; }
 
         /// <summary>
@@ -87,23 +106,26 @@ namespace UACloudLibrary
         public Tuple<string, string>[] AdditionalProperties { get; set; }
     }
 
-
+    [Table("Organisations")]
     public class Organisation
     {
         public Organisation()
         {
-            ID = string.Empty;
+            ID = Guid.NewGuid().ToString();
             Name = string.Empty;
             Description = null;
             LogoUrl = null;
             ContactEmail = null;
             Website = null;
-            CreationTimeStamp = DateTime.UtcNow;
-            LastModification = DateTime.UtcNow;
+            CreationTime = DateTime.UtcNow;
+            LastModificationTime = DateTime.UtcNow;
         }
 
+        [Key]
+        [Required]
         public string ID { get; set; }
 
+        [Required]
         public string Name { get; set; }
 
         public string Description { get; set; }
@@ -114,52 +136,59 @@ namespace UACloudLibrary
 
         public Uri Website { get; set; }
 
-        public DateTime CreationTimeStamp { get; set; }
+        public DateTime CreationTime { get; set; }
 
-        public DateTime LastModification { get; set; }
+        public DateTime LastModificationTime { get; set; }
     }
 
-    public class AddresSpaceCategory
+    [Table("AddressSpaceCategories")]
+    public class AddressSpaceCategory
     {
-        public AddresSpaceCategory()
+        public AddressSpaceCategory()
         {
-            ID = string.Empty;
+            ID = Guid.NewGuid().ToString();
             Name = string.Empty;
             Description = null;
             IconUrl = null;
-            CreationTimeStamp = DateTime.UtcNow;
-            LastModification = DateTime.UtcNow;
+            CreationTime = DateTime.UtcNow;
+            LastModificationTime = DateTime.UtcNow;
         }
 
+        [Key]
+        [Required]
         public string ID { get; set; }
 
+        [Required]
         public string Name { get; set; }
 
         public string Description { get; set; }
 
         public Uri IconUrl { get; set; }
 
-        public DateTime CreationTimeStamp { get; set; }
+        public DateTime CreationTime { get; set; }
 
-        public DateTime LastModification { get; set; }
+        public DateTime LastModificationTime { get; set; }
     }
 
+    [Table("AddressSpaceNodesets")]
     public class AddressSpaceNodeset2
     {
         public AddressSpaceNodeset2()
         {
             AddressSpaceID = string.Empty;
             NodesetXml = string.Empty;
-            CreationTimeStamp = DateTime.UtcNow;
-            LastModification = DateTime.UtcNow;
+            CreationTime = DateTime.UtcNow;
+            LastModificationTime = DateTime.UtcNow;
         }
 
+        [Key]
+        [ForeignKey("AddressSpace")]
         public string AddressSpaceID { get; set; }
 
         public string NodesetXml { get; set; }
 
-        public DateTime CreationTimeStamp { get; set; }
+        public DateTime CreationTime { get; set; }
 
-        public DateTime LastModification { get; set; }
+        public DateTime LastModificationTime { get; set; }
     }
 }
