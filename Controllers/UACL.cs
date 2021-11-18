@@ -66,8 +66,7 @@ namespace UANodesetWebViewer.Controllers
                 }
 
                 // call the UA Cloud Library REST endpoint for info model upload
-                instanceUrl = instanceUrl.Trim();
-                if (string.IsNullOrWhiteSpace(instanceUrl) || !Uri.IsWellFormedUriString(instanceUrl, UriKind.Absolute))
+                if (string.IsNullOrWhiteSpace(instanceUrl) || !Uri.IsWellFormedUriString(instanceUrl.Trim(), UriKind.Absolute))
                 {
                     throw new ArgumentException("Invalid UA Cloud Library instance Url entered!");
                 }
@@ -214,6 +213,7 @@ namespace UANodesetWebViewer.Controllers
                 string nodesetFileName = BrowserController._nodeSetFilename[BrowserController._nodeSetFilename.Count - 1];
                 uaAddressSpace.Nodeset.NodesetXml = System.IO.File.ReadAllText(nodesetFileName);
 
+                instanceUrl = instanceUrl.Trim();
                 if (!instanceUrl.EndsWith('/'))
                 {
                     instanceUrl += '/';
@@ -245,7 +245,7 @@ namespace UANodesetWebViewer.Controllers
                 else
                 {
                     uaclModel.StatusMessage = response;
-                    return View("Error", uaclModel);
+                    return View("Index", uaclModel);
                 }
             }
             catch (Exception ex)
@@ -253,10 +253,10 @@ namespace UANodesetWebViewer.Controllers
                 if ((ex is WebException) && (((WebException)ex).Response != null))
                 {
                     uaclModel.StatusMessage = new StreamReader(((WebException)ex).Response.GetResponseStream()).ReadToEnd();
-                    return View("Error", uaclModel);
+                    return View("Index", uaclModel);
                 }
                 uaclModel.StatusMessage = ex.Message;
-                return View("Error", uaclModel);
+                return View("Index", uaclModel);
             }
         }
     }
