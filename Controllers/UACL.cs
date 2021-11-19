@@ -236,17 +236,8 @@ namespace UANodesetWebViewer.Controllers
                 string response = webClient.UploadString(address, "PUT", body);
                 webClient.Dispose();
 
-                AddressSpace returnedAddressSpace = JsonConvert.DeserializeObject<AddressSpace>(response);
-                if (!string.IsNullOrEmpty(returnedAddressSpace.Nodeset.AddressSpaceID))
-                {
-                    uaclModel.StatusMessage = "Upload successful!";
-                    return View("Index", uaclModel);
-                }
-                else
-                {
-                    uaclModel.StatusMessage = response;
-                    return View("Index", uaclModel);
-                }
+                uaclModel.StatusMessage = response;
+                return View("Index", uaclModel);
             }
             catch (Exception ex)
             {
