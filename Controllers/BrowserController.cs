@@ -279,13 +279,19 @@ namespace UANodesetWebViewer.Controllers
                     loadedNodesets.Add(filename);
                 }
 
+                // trim the additional nodeset filename formatting
                 for (int i = 0; i < loadedNodesets.Count; i++)
                 {
                     loadedNodesets[i] = Path.GetFileNameWithoutExtension(loadedNodesets[i]).ToLower();
 
-                    if (loadedNodesets[i].Contains(".ua."))
+                    if (loadedNodesets[i].StartsWith("opc."))
                     {
-                        loadedNodesets[i] = loadedNodesets[i].Substring(loadedNodesets[i].IndexOf(".ua.") + 4);
+                        loadedNodesets[i] = loadedNodesets[i].Substring(4);
+                    }
+
+                    if (loadedNodesets[i].StartsWith("ua."))
+                    {
+                        loadedNodesets[i] = loadedNodesets[i].Substring(3);
                     }
 
                     if (loadedNodesets[i].EndsWith(".nodeset2"))
